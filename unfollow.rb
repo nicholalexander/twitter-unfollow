@@ -1,5 +1,5 @@
+require 'dotenv/load'
 require 'twitter'
-require 'pry'
 
 class Unfollow
   def run
@@ -10,10 +10,9 @@ class Unfollow
 
       followings.each do |user|
         puts "Unfollowing user #{user.screen_name} (#{user.name})"
-        # @client.add_list_member(old_follows_list, user.id)
         @client.unfollow(user.id)
-        `echo "#{user.screen_name}" >> unfollowed_2_usernames.txt`
-        `echo "#{user.screen_name} (#{user.name}): #{user.description}" >> unfollowed_2_full_names.txt`
+        `echo "#{user.screen_name}" >> unfollowed_usernames.txt`
+        `echo "#{user.screen_name} (#{user.name}): #{user.description}" >> unfollowed_full_names.txt`
         sleep 0.1
       end
     rescue => e
@@ -21,13 +20,14 @@ class Unfollow
         puts "#{e} - Sleeping"
         sleep 20
         retry
+      else
+        raise e
       end
-      binding.pry
     end
   end
 
   def old_follows_list
-    @_old_follows_list ||= @client.lists.find { |a| a.name == "People To Refollow" }
+    @_old_follows_list ||= @client.lists.find { |a| a.name == "People" }
   end
 
   def create_client

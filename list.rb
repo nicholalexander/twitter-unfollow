@@ -5,14 +5,11 @@ require 'pry'
 class List
   attr_reader :client, :usernames, :list
 
-  OFFSET = 69
-
   def initialize(list)
     @client = create_client
     @usernames = []
     @list = get_list(list)
     raise if @list.nil?
-    @offset = 69
   end
 
   def run
@@ -30,10 +27,7 @@ class List
           retry
         end
         if e.message == "You aren't allowed to add members to this list."
-          last_attempted_index = @usernames.index(user.screen_name)
-          unsuccessfull = @usernames[last_attempted_index-1..-1]
-          File.open('./unsuccessfull.txt', 'w') {|f| f.puts (unsuccessfull) }
-          raise
+          next
         end
       end
     end
@@ -48,11 +42,10 @@ class List
   end
 
   def get_usernames
-    file = File.open("./unfollowed_2_usernames.txt")
+    file = File.open("./unfollowed_usernames.txt")
     file.each_line do |line|
       @usernames << line.chomp
     end
-    @usernames = @usernames[OFFSET..-1]
   end
 
   def get_list(list)
