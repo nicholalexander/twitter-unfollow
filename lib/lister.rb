@@ -1,12 +1,8 @@
-require 'twitter'
-require 'pry'
-
-
-class List
-  attr_reader :client, :usernames, :list
+class Lister
+  # attr_reader :client, :usernames, :list
 
   def initialize(list)
-    @client = create_client
+    @client = TwitterClient.new.client
     @usernames = []
     @list = get_list(list)
     raise if @list.nil?
@@ -25,8 +21,8 @@ class List
           puts "#{e} - Sleeping"
           sleep 20
           retry
-        end
-        if e.message == "You aren't allowed to add members to this list."
+        elsif e.message == "You aren't allowed to add members to this list."
+          # should log it.
           next
         end
       end
@@ -52,18 +48,4 @@ class List
     @client.lists.find { |a| a.name == list }
   end
 
-  def create_client
-    client = Twitter::REST::Client.new do |config|
-      config.consumer_key        = 'hTevf3YAcUv0mo75485CqE0qu'
-      config.consumer_secret     = 'iHXJUAf3g1gxcmYeEYUQLky2CySlllkeZ01Atw8yAvYp8NpEVV'
-      config.access_token        = '1616421-8FbWIrCayWHv5bqMAq7ZYUlOzkxbxG4Gv0fGZRiLwa'
-      config.access_token_secret = 'HPZhnBLoKNKVOBIMqWDPtCC0Nuw2ePNh9zWumiqovLXbX'
-    end
-  end
 end
-
-list = List.new("people")
-list.run
-
-
-  
