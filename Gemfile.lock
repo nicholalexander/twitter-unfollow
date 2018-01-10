@@ -7,6 +7,7 @@ GEM
     coderay (1.1.1)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.2.1)
     equalizer (0.0.11)
     faraday (0.11.0)
       multipart-post (>= 1.2, < 3)
@@ -50,8 +51,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
   pry
   twitter
 
 BUNDLED WITH
-   1.14.3
+   1.16.0
